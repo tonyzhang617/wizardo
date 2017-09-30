@@ -1,4 +1,4 @@
-package com.wizard;
+package com.wizardo;
 
 import android.app.Application;
 
