@@ -5,19 +5,21 @@ import { PlayerBet } from '../components/player_bet.js'
 
 export class RoundScreen extends Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     bets: {}
-  //   };
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      players: [],
+      roundNum: 0,
+      totalBets: 0,
+    };
+  }
 
   static navigationOptions = ({navigation}) => ({
     title: `Round ${navigation.state.params.roundNum}`,
   });
 
   componentWillMount() {
-    const { state, setParams } = this.props.navigation;
+    const { state } = this.props.navigation;
 
     var newPlayers = state.params.players;
     var dealer = newPlayers.shift();
@@ -27,25 +29,57 @@ export class RoundScreen extends Component {
       item.bet = 0;
     });
 
-    setParams({
-      players: newPlayers
+    this.setState({
+      players: newPlayers,
+      roundNum: state.params.roundNum,
+      totalBets: 0,
     });
 
     console.log(`Round ${state.params.roundNum} initialized`);
   }
 
-  _onIncBet = (name: string) => {
-    // TODO
+  componentWillUpdate() {
+    console.log('Round Screen updated');
   }
 
-  _onDecBet = (name: string) => {
-    // TODO
+  _onIncBet = (playerId: number) => {
+    var newPlayers = this.state.players.slice();
+    for (var i = 0; i < newPlayers.length; ++i) {
+      if (newPlayers[i].key === playerId) {
+        if (newPlayers[i].bet < this.state.roundNum) {
+          newPlayers[i].bet += 1;
+        }
+        // TODO: implement can't bet if total bets is round number
+        break;
+      }
+    }
+
+    this.setState({
+      players: newPlayers
+    });
+  }
+
+  _onDecBet = (playerId: number) => {
+    var newPlayers = this.state.players.slice();
+    for (var i = 0; i < newPlayers.length; ++i) {
+      if (newPlayers[i].key === playerId) {
+        if (newPlayers[i].bet > 0) {
+          newPlayers[i].bet -= 1;
+        }
+        break;
+      }
+    }
+
+    this.setState({
+      players: newPlayers
+    });
   }
 
   _renderItem = ({item}) => {
     console.log(item);
     return (
       <PlayerBet
+        playerId={item.key}
         name={item.name}
         bet={item.bet}
         score={item.score}
@@ -55,19 +89,22 @@ export class RoundScreen extends Component {
     );
   };
 
-  render() {
-    const { state, setParams } = this.props.navigation;
+  _finalize() {
 
+  }
+
+  render() {
     return (
       <View style={{flex: 1}}>
         <FlatList
-          data={state.params.players}
+          data={this.state.players}
           renderItem={this._renderItem}
         />
         <Button
           title='Finalize'
           backgroundColor='#F44336'
           fontSize={24}
+          onPress={this._finalize}
         />
       </View>
     );
