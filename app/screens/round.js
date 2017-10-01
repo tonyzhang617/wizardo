@@ -43,11 +43,16 @@ export class RoundScreen extends Component {
     console.log(name);
   }
 
+  _onDecBet = (name: string) => {
+
+  }
+
   _renderItem = ({item}) => {
     console.log(item);
     return <PlayerBet
       name={item.key}
       onIncBet={this._onIncBet}
+      onDecBet={this._onDecBet}
     />
   };
 
