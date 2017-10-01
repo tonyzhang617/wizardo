@@ -5,12 +5,12 @@ import { PlayerBet } from '../components/player_bet.js'
 
 export class RoundScreen extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      bets: {}
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     bets: {}
+  //   };
+  // }
 
   static navigationOptions = ({navigation}) => ({
     title: `Round ${navigation.state.params.roundNum}`,
@@ -23,37 +23,36 @@ export class RoundScreen extends Component {
     var dealer = newPlayers.shift();
     newPlayers.push(dealer);
 
+    newPlayers.forEach((item) => {
+      item.bet = 0;
+    });
+
     setParams({
       players: newPlayers
-    });
-
-    var bets = {};
-    newPlayers.forEach((item) => {
-      bets[item] = 0;
-    });
-
-    this.setState({
-      bets: bets
     });
 
     console.log(`Round ${state.params.roundNum} initialized`);
   }
 
   _onIncBet = (name: string) => {
-    console.log(name);
+    // TODO
   }
 
   _onDecBet = (name: string) => {
-
+    // TODO
   }
 
   _renderItem = ({item}) => {
     console.log(item);
-    return <PlayerBet
-      name={item.key}
-      onIncBet={this._onIncBet}
-      onDecBet={this._onDecBet}
-    />
+    return (
+      <PlayerBet
+        name={item.name}
+        bet={item.bet}
+        score={item.score}
+        onIncBet={this._onIncBet}
+        onDecBet={this._onDecBet}
+      />
+    );
   };
 
   render() {

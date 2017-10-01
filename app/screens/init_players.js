@@ -8,19 +8,26 @@ export class InitPlayersScreen extends Component {
     super(props);
     this.state = {
       currInput: 'New Player',
-      players: [],
-      scores: {}
+      players: []
     };
   }
 
-  static navigationOptions = ({navigation}) => {
-    return {
-      title: 'Add Players'
-    };
+  static navigationOptions = {
+    title: 'Add Players'
   };
 
+  _renderItem({ item }) {
+    return (
+      <Text>
+        {item.name}
+      </Text>
+    );
+  }
+
   render() {
-    const { navigate, state } = this.props.navigation;
+    const { navigate } = this.props.navigation;
+
+    const minPlayerNum = 2;
 
     return (
       <View style={{flex: 1}}>
@@ -36,32 +43,35 @@ export class InitPlayersScreen extends Component {
           }
           onSubmitEditing={
             (event) => {
-              var newPlayer = event.nativeEvent.text;
-              var newScores = this.state.scores;
-              newScores[newPlayer] = 0;
+
+              var newPlayer = {
+                key: this.state.players.length,
+                name: event.nativeEvent.text,
+                bet: 0,
+                score: 0,
+              };
+
               this.setState({
                 currInput: '',
-                players: this.state.players.concat([{key: newPlayer}]),
-                scores: newScores
+                players: this.state.players.concat([newPlayer]),
               });
             }
           }
         />
         <FlatList
           data={ this.state.players }
-          renderItem={({item}) => <Text>{item.key}</Text>}
+          renderItem={this._renderItem}
         />
         <View>
           <Button
-            title={(this.state.players.length < 4) ? 'Start' : `Start (${~~(60/this.state.players.length)} Rounds)`}
-            disabled={(this.state.players.length < 4) ? true : false}
+            title={(this.state.players.length < minPlayerNum) ? 'Start' : `Start (${~~(60/this.state.players.length)} Rounds)`}
+            disabled={(this.state.players.length < minPlayerNum) ? true : false}
             backgroundColor='#2962FF'
             fontSize={24}
             onPress={() => navigate('Round', {
               roundNum: 1,
               tot_round: ~~(60/this.state.players.length),
               players: this.state.players,
-              scores: this.state.scores,
             })}
           />
         </View>

@@ -5,7 +5,7 @@ import { Button } from 'react-native-elements';
 export class PlayerBet extends Component {
   render() {
     return (
-      <View>
+      <View style={{flex: 1, flexDirection: 'row'}}>
         <Text>
           {this.props.name}
         </Text>
@@ -13,6 +13,9 @@ export class PlayerBet extends Component {
           icon={{name: 'add-circle'}}
           onPress={() => this.props.onIncBet(this.props.name)}
         />
+        <Text>
+          {this.props.bet}
+        </Text>
         <Button
           icon={{name: 'remove-circle'}}
           onPress={() => this.props.onDecBet(this.props.name)}
