@@ -48,6 +48,7 @@ export class InitPlayersScreen extends Component {
                 key: this.state.players.length,
                 name: event.nativeEvent.text,
                 bet: 0,
+                hit: 0,
                 score: 0,
               };
 
@@ -70,7 +71,7 @@ export class InitPlayersScreen extends Component {
             fontSize={24}
             onPress={() => navigate('Round', {
               roundNum: 1,
-              tot_round: ~~(60/this.state.players.length),
+              totalRounds: ~~(60/this.state.players.length),
               players: this.state.players,
             })}
           />

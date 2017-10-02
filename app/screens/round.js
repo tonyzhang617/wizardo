@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, FlatList, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
-import { PlayerBet } from '../components/player_bet.js'
+import { PlayerBet } from '../components/player_bet.js';
 
 export class RoundScreen extends Component {
 
@@ -10,6 +10,7 @@ export class RoundScreen extends Component {
     this.state = {
       players: [],
       roundNum: 0,
+      totalRounds: 0,
       totalBets: 0,
     };
   }
@@ -27,11 +28,13 @@ export class RoundScreen extends Component {
 
     newPlayers.forEach((item) => {
       item.bet = 0;
+      item.hit = 0;
     });
 
     this.setState({
       players: newPlayers,
       roundNum: state.params.roundNum,
+      totalRounds: state.params.totalRounds,
       totalBets: 0,
     });
 
@@ -90,7 +93,13 @@ export class RoundScreen extends Component {
   };
 
   _finalize() {
+    const { navigate } = this.props.navigation;
 
+    navigate('RoundResult', {
+      players: this.state.players,
+      roundNum: this.state.roundNum,
+      totalRounds: this.state.totalRounds,
+    });
   }
 
   render() {
@@ -104,7 +113,7 @@ export class RoundScreen extends Component {
           title='Finalize'
           backgroundColor='#F44336'
           fontSize={24}
-          onPress={this._finalize}
+          onPress={this._finalize.bind(this)}
         />
       </View>
     );
