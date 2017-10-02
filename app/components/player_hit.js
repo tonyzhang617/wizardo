@@ -11,14 +11,14 @@ export class PlayerHit extends Component {
         </Text>
         <Button
           icon={{name: 'add-circle'}}
-          onPress={() => this.props.onIncBet(this.props.playerId)}
+          onPress={() => this.props.onIncHit(this.props.playerId)}
         />
         <Text>
-          {this.props.bet}
+          {this.props.hit}
         </Text>
         <Button
           icon={{name: 'remove-circle'}}
-          onPress={() => this.props.onDecBet(this.props.playerId)}
+          onPress={() => this.props.onDecHit(this.props.playerId)}
         />
       </View>
     );
