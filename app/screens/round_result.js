@@ -72,6 +72,7 @@ export class RoundResultScreen extends Component {
         playerId={ item.key }
         name={ item.name }
         hit={ item.hit }
+        bet={ item.bet }
         score={ item.score }
       />
     );
@@ -95,6 +96,16 @@ export class RoundResultScreen extends Component {
         <FlatList
           data={this.state.players}
           renderItem={this._renderItem.bind(this)}
+          renderSeparator={() => {
+            return (
+              <View
+                style={{
+                  height: 1,
+                  backgroundColor: "#CED0CE",
+                }}
+              />
+            );}
+          }
         />
         <Button
           title='Start Next Round'
