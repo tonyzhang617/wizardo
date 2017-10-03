@@ -87,7 +87,7 @@ export class RoundResultScreen extends Component {
     const { navigate } = this.props.navigation;
 
     if (this.state.roundNum === this.state.totalRounds) {
-      navigate('FinalResult', {
+      navigate('Result', {
         players: newPlayers,
       });
     } else {

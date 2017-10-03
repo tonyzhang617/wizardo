@@ -44,7 +44,7 @@ export class PlayerHit extends Component {
             onPress={() => this.props.onIncHit(this.props.playerId)}
           />
           <Text>
-            {this.props.hit}
+            {`${this.props.hit} / ${this.props.bet}`}
           </Text>
           <Button
             icon={{

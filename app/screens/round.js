@@ -94,7 +94,7 @@ export class RoundScreen extends Component {
   _finalize() {
     const { navigate } = this.props.navigation;
 
-    navigate('Result', {
+    navigate('RoundResult', {
       players: this.state.players,
       roundNum: this.state.roundNum,
       totalRounds: this.state.totalRounds,
