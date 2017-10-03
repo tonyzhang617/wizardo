@@ -17,6 +17,7 @@ export class RoundScreen extends Component {
 
   static navigationOptions = ({navigation}) => ({
     title: `Round ${navigation.state.params.roundNum}`,
+    headerLeft: null,
   });
 
   componentWillMount() {

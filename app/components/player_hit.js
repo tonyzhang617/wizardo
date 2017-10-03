@@ -24,8 +24,9 @@ export class PlayerHit extends Component {
           </Text>
           <Text>
             {
-              this.props.score + ((this.props.hit === this.props.bet) ?
-                (20 + 10*this.props.hit) : (-10 * Math.abs(this.props.bet - this.props.hit)))
+              `${this.props.score} ${(this.props.hit===this.props.bet)?'+':'-'} ${(this.props.hit===this.props.bet)?(20+10*this.props.hit):(10*Math.abs(this.props.bet-this.props.hit))}`
+              // this.props.score + ((this.props.hit === this.props.bet) ?
+              //   (20 + 10*this.props.hit) : (-10 * Math.abs(this.props.bet - this.props.hit)))
             }
           </Text>
         </View>

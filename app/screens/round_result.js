@@ -15,6 +15,7 @@ export class RoundResultScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: `Round ${navigation.state.params.roundNum} Result`,
+    headerLeft: null,
   });
 
   componentWillMount() {
