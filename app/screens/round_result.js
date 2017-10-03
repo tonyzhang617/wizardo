@@ -79,12 +79,17 @@ export class RoundResultScreen extends Component {
   }
 
   _nextRound() {
+    var newPlayers = this.state.players.slice();
+    newPlayers.forEach((item) => {
+      item.score += ((item.hit === item.bet)) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
+    });
+
     const { navigate } = this.props.navigation;
 
     // TODO: check roundNum
 
     navigate('Round', {
-      players: this.state.players,
+      players: newPlayers,
       roundNum: this.state.roundNum+1,
       totalRounds: this.state.totalRounds,
     });

@@ -79,7 +79,6 @@ export class RoundScreen extends Component {
   }
 
   _renderItem = ({item}) => {
-    console.log(item);
     return (
       <PlayerBet
         playerId={item.key}
