@@ -86,13 +86,17 @@ export class RoundResultScreen extends Component {
 
     const { navigate } = this.props.navigation;
 
-    // TODO: check roundNum
-
-    navigate('Round', {
-      players: newPlayers,
-      roundNum: this.state.roundNum+1,
-      totalRounds: this.state.totalRounds,
-    });
+    if (this.state.roundNum === this.state.totalRounds) {
+      navigate('FinalResult', {
+        players: newPlayers,
+      });
+    } else {
+      navigate('Round', {
+        players: newPlayers,
+        roundNum: this.state.roundNum+1,
+        totalRounds: this.state.totalRounds,
+      });
+    }
   }
 
   render() {
