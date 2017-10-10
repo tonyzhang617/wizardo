@@ -42,7 +42,7 @@ export class PlayerHit extends Component {
             icon={{
               name: 'add-circle'
             }}
-            onPress={() => this.props.onIncHit(this.props.playerId)}
+            onPress={() => this.props.onIncHit(this.props.index)}
           />
           <Text>
             {`${this.props.hit} / ${this.props.bet}`}
@@ -52,7 +52,7 @@ export class PlayerHit extends Component {
               name: 'remove-circle'
             }}
             color='#F44336'
-            onPress={() => this.props.onDecHit(this.props.playerId)}
+            onPress={() => this.props.onDecHit(this.props.index)}
           />
         </View>
       </View>

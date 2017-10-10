@@ -35,14 +35,14 @@ export class PlayerBet extends Component {
         }}>
           <Button
             icon={{name: 'add-circle'}}
-            onPress={() => this.props.onIncBet(this.props.playerId)}
+            onPress={() => this.props.onIncBet(this.props.index)}
           />
           <Text>
             {this.props.bet}
           </Text>
           <Button
             icon={{name: 'remove-circle'}}
-            onPress={() => this.props.onDecBet(this.props.playerId)}
+            onPress={() => this.props.onDecBet(this.props.index)}
           />
         </View>
       </View>

@@ -73,6 +73,7 @@ export class InitPlayersScreen extends Component {
               roundNum: 1,
               totalRounds: ~~(60/this.state.players.length),
               players: this.state.players,
+              rounds: [],
             })}
           />
         </View>

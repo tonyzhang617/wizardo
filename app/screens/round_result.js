@@ -4,15 +4,6 @@ import { Button } from 'react-native-elements';
 import { PlayerHit } from '../components/player_hit.js';
 
 export class RoundResultScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      players: [],
-      roundNum: 0,
-      totalRounds: 0,
-    };
-  }
-
   static navigationOptions = ({ navigation }) => ({
     title: `Round ${navigation.state.params.roundNum} Result`,
     headerLeft: null,
@@ -21,22 +12,25 @@ export class RoundResultScreen extends Component {
   componentWillMount() {
     const { params } = this.props.navigation.state;
 
-    var newPlayers = params.players.slice();
-    newPlayers.forEach((player) => {
-      player.hit = player.bet;
+    // load round
+    var round = params.rounds[params.roundNum-1];
+    // TODO: update scores
+    var th = round.reduce((sum, item) => {
+      return sum + item.hit;
+    }, 0);
+    this.setState({
+      currRound: round,
+      roundNum: params.roundNum,
+      totalHits: th,
     });
 
-    this.setState({
-      players: newPlayers,
-      roundNum: params.roundNum,
-      totalRounds: params.totalRounds,
-    });
+    console.log(`Round ${params.roundNum} results loaded`);
   }
 
-  _onIncHit = (playerId: number) => {
-    var newPlayers = this.state.players.slice();
+  _onIncHit = (idx: number) => {
+    var newPlayers = this.state.currRound.slice();
     for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].key === playerId) {
+      if (newPlayers[i].index === idx) {
         if (newPlayers[i].hit < this.state.roundNum) {
           newPlayers[i].hit += 1;
         }
@@ -45,14 +39,14 @@ export class RoundResultScreen extends Component {
     }
 
     this.setState({
-      players: newPlayers
+      currRound: newPlayers
     });
   }
 
-  _onDecHit = (playerId: number) => {
-    var newPlayers = this.state.players.slice();
+  _onDecHit = (idx: number) => {
+    var newPlayers = this.state.currRound.slice();
     for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].key === playerId) {
+      if (newPlayers[i].index === idx) {
         if (newPlayers[i].hit > 0) {
           newPlayers[i].hit -= 1;
         }
@@ -61,41 +55,43 @@ export class RoundResultScreen extends Component {
     }
 
     this.setState({
-      players: newPlayers
+      currRound: newPlayers
     });
   }
 
   _renderItem({ item }) {
     return (
       <PlayerHit
-        onIncHit={this._onIncHit}
-        onDecHit={this._onDecHit}
-        playerId={ item.key }
+        index={ item.index }
         name={ item.name }
         hit={ item.hit }
         bet={ item.bet }
         score={ item.score }
+        onIncHit={this._onIncHit}
+        onDecHit={this._onDecHit}
       />
     );
   }
 
   _nextRound() {
-    var newPlayers = this.state.players.slice();
-    newPlayers.forEach((item) => {
+    const { navigate, state } = this.props.navigation;
+
+    var newRounds = state.params.rounds.slice();
+    newRounds[this.state.roundNum-1].forEach((item, index) => {
       item.score += ((item.hit === item.bet)) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
     });
 
-    const { navigate } = this.props.navigation;
-
-    if (this.state.roundNum === this.state.totalRounds) {
+    if (this.state.roundNum === state.params.totalRounds) {
       navigate('Result', {
-        players: newPlayers,
+        // TODO
+        players: newRounds,
       });
     } else {
       navigate('Round', {
-        players: newPlayers,
+        rounds: newRounds,
+        players: state.params.players,
         roundNum: this.state.roundNum+1,
-        totalRounds: this.state.totalRounds,
+        totalRounds: state.params.totalRounds,
       });
     }
   }
@@ -104,8 +100,9 @@ export class RoundResultScreen extends Component {
     return (
       <View style={{flex: 1}}>
         <FlatList
-          data={this.state.players}
+          data={this.state.currRound}
           renderItem={this._renderItem.bind(this)}
+          keyExtractor={(item, index) => { return item.index; }}
           renderSeparator={() => {
             return (
               <View
