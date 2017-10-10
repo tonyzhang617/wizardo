@@ -22,26 +22,41 @@ export class RoundScreen extends Component {
         currRound: round,
         roundNum: params.roundNum,
         totalBets: tb,
+        rounds: params.rounds,
+        totalRounds: params.totalRounds,
       });
 
       console.log(`Round ${params.roundNum} loaded`);
     } else {
       // initialize round
-      var newRound = params.players.map((item, index) => {
-        return {
-          name: item.name,
-          index: index,
-          bet: 0,
-          hit: 0,
-          score: (params.roundNum === 1) ? 0 : (params.rounds[params.roundNum - 2][index].score),
-        };
-      });
+      var newRound = null;
+      if (params.roundNum === 1) {
+        newRound = params.players.map((item, index) => {
+          return {
+            name: item.name,
+            index: index,
+            bet: 0,
+            hit: 0,
+            score: (params.roundNum === 1) ? 0 : (params.rounds[params.roundNum - 2][index].score),
+          };
+        });
+      } else {
+        newRound = params.rounds[params.roundNum-2].map((item, index) => {
+          return {
+            name: item.name,
+            index: item.index,
+            bet: 0,
+            hit: 0,
+            score: item.score,
+        }});
+      }
 
       this.setState({
         currRound: newRound,
         roundNum: params.roundNum,
-        // totalRounds: params.totalRounds,
         totalBets: 0,
+        rounds: params.rounds,
+        totalRounds: params.totalRounds,
       });
 
       console.log(`Round ${params.roundNum} initialized`);
@@ -101,16 +116,15 @@ export class RoundScreen extends Component {
   };
 
   _finalize() {
-    const { state, navigate } = this.props.navigation;
+    const { navigate } = this.props.navigation;
 
-    var newRounds = state.params.rounds.slice();
+    var newRounds = this.state.rounds.slice();
     newRounds[this.state.roundNum-1] = this.state.currRound;
 
     navigate('RoundResult', {
       rounds: newRounds,
-      players: state.params.players,
       roundNum: this.state.roundNum,
-      totalRounds: state.params.totalRounds,
+      totalRounds: this.state.totalRounds,
     });
   }
 

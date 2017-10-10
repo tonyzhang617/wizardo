@@ -22,6 +22,8 @@ export class RoundResultScreen extends Component {
       currRound: round,
       roundNum: params.roundNum,
       totalHits: th,
+      rounds: params.rounds,
+      totalRounds: params.totalRounds,
     });
 
     console.log(`Round ${params.roundNum} results loaded`);
@@ -74,14 +76,14 @@ export class RoundResultScreen extends Component {
   }
 
   _nextRound() {
-    const { navigate, state } = this.props.navigation;
+    const { navigate } = this.props.navigation;
 
-    var newRounds = state.params.rounds.slice();
+    var newRounds = this.state.rounds.slice();
     newRounds[this.state.roundNum-1].forEach((item, index) => {
       item.score += ((item.hit === item.bet)) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
     });
 
-    if (this.state.roundNum === state.params.totalRounds) {
+    if (this.state.roundNum === this.state.totalRounds) {
       navigate('Result', {
         // TODO
         players: newRounds,
@@ -89,9 +91,8 @@ export class RoundResultScreen extends Component {
     } else {
       navigate('Round', {
         rounds: newRounds,
-        players: state.params.players,
         roundNum: this.state.roundNum+1,
-        totalRounds: state.params.totalRounds,
+        totalRounds: this.state.totalRounds,
       });
     }
   }
