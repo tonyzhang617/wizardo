@@ -130,7 +130,10 @@ export class RoundScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{
+        flex: 1,
+        flexDirection: 'column'
+      }}>
         <FlatList
           data={this.state.currRound}
           renderItem={this._renderItem}
@@ -138,8 +141,10 @@ export class RoundScreen extends Component {
         />
         <Button
           title='Place Bets'
-          backgroundColor='#F44336'
           fontSize={24}
+          raised
+          buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
+          textStyle={{textAlign: 'center'}}
           onPress={this._finalize.bind(this)}
         />
       </View>
