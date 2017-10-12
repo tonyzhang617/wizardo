@@ -43,7 +43,6 @@ export class RoundScreen extends Component {
       totalBets: 0,
       rounds: params.rounds,
       totalRounds: params.totalRounds,
-      isFinal: false,
     });
 
     console.log(`Round ${params.roundNum} initialized`);
@@ -89,7 +88,6 @@ export class RoundScreen extends Component {
   }
 
   _renderItem = ({item}) => {
-    console.log(this.state.isFinal);
     return (
       <PlayerBet
         index={item.index}
@@ -98,7 +96,6 @@ export class RoundScreen extends Component {
         score={item.score}
         onIncBet={this._onIncBet}
         onDecBet={this._onDecBet}
-        isFinal={this.state.isFinal}
       />
     );
   };
@@ -106,27 +103,18 @@ export class RoundScreen extends Component {
   _finalize() {
     const { navigate } = this.props.navigation;
 
-    if (!this.state.isFinal) {
-      var newRounds = this.state.rounds.slice();
-      newRounds[this.state.roundNum-1] = this.state.currRound;
+    var newRounds = this.state.rounds.slice();
+    newRounds[this.state.roundNum-1] = this.state.currRound;
 
-      navigate('RoundResult', {
-        rounds: newRounds,
-        roundNum: this.state.roundNum,
-        totalRounds: this.state.totalRounds,
-      });
+    navigate('RoundResult', {
+      rounds: newRounds,
+      roundNum: this.state.roundNum,
+      totalRounds: this.state.totalRounds,
+    });
 
-      this.setState({
-        isFinal: true,
-        rounds: newRounds,
-      });
-    } else {
-      navigate('RoundResult', {
-        rounds: this.state.rounds,
-        roundNum: this.state.roundNum,
-        totalRounds: this.state.totalRounds,
-      })
-    }
+    this.setState({
+      rounds: newRounds,
+    });
   }
 
   render() {
@@ -141,7 +129,7 @@ export class RoundScreen extends Component {
           keyExtractor={(item, index) => item.index}
         />
         <Button
-          title={ this.state.isFinal ? 'Continue' : 'Place Bets' }
+          title='Place Bets'
           fontSize={24}
           raised
           buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
