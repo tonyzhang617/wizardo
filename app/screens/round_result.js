@@ -5,25 +5,28 @@ import { PlayerHit } from '../components/player_hit.js';
 
 export class RoundResultScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: `Round ${navigation.state.params.roundNum} Result`,
-    headerLeft: null,
+    title: `Round ${navigation.state.params.roundNum} Result`
   });
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
 
     // load round
-    var round = params.rounds[params.roundNum-1];
-    // TODO: update scores
+    var round = params.rounds[params.roundNum-1].slice();
     var th = round.reduce((sum, item) => {
       return sum + item.hit;
     }, 0);
+    round.forEach(item => {
+      item.hit = item.bet;
+    });
+
     this.setState({
       currRound: round,
       roundNum: params.roundNum,
       totalHits: th,
       rounds: params.rounds,
       totalRounds: params.totalRounds,
+      isFinal: false,
     });
 
     console.log(`Round ${params.roundNum} results loaded`);
@@ -71,6 +74,7 @@ export class RoundResultScreen extends Component {
         score={ item.score }
         onIncHit={this._onIncHit}
         onDecHit={this._onDecHit}
+        isFinal={this.state.isFinal}
       />
     );
   }
@@ -78,10 +82,17 @@ export class RoundResultScreen extends Component {
   _nextRound() {
     const { navigate } = this.props.navigation;
 
-    var newRounds = this.state.rounds.slice();
-    newRounds[this.state.roundNum-1].forEach((item, index) => {
-      item.score += ((item.hit === item.bet)) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
-    });
+    if (!this.state.isFinal) {
+      var newRounds = this.state.rounds.slice();
+      newRounds[this.state.roundNum-1].forEach((item, index) => {
+        item.score += ((item.hit === item.bet)) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
+      });
+
+      this.setState({
+        rounds: newRounds,
+        isFinal: true,
+      });
+    }
 
     if (this.state.roundNum === this.state.totalRounds) {
       navigate('Result', {
@@ -90,7 +101,7 @@ export class RoundResultScreen extends Component {
       });
     } else {
       navigate('Round', {
-        rounds: newRounds,
+        rounds: this.state.rounds,
         roundNum: this.state.roundNum+1,
         totalRounds: this.state.totalRounds,
       });

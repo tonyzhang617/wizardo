@@ -34,6 +34,9 @@ export class RoundScreen extends Component {
       }});
     }
 
+    var dealer = newRound.shift();
+    newRound.push(dealer);
+
     this.setState({
       currRound: newRound,
       roundNum: params.roundNum,
@@ -134,7 +137,7 @@ export class RoundScreen extends Component {
       }}>
         <FlatList
           data={this.state.currRound}
-          renderItem={this._renderItem.bind(this)}
+          renderItem={this._renderItem}
           keyExtractor={(item, index) => item.index}
         />
         <Button
