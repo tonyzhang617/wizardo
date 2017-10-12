@@ -61,6 +61,7 @@ export class PlayerBet extends Component {
             alignItems: 'center',
           }}>
             <Button
+              disabled={ this.props.isFinal ? true : false }
               raised
               icon={{ name: 'remove-circle', size: 24 }}
               buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
@@ -76,6 +77,7 @@ export class PlayerBet extends Component {
                 </Text>
               </View>
             <Button
+              disabled={ this.props.isFinal ? true : false }
               raised
               icon={{ name: 'add-circle', size: 24 }}
               buttonStyle={{ backgroundColor: 'green', borderRadius: 4 }}

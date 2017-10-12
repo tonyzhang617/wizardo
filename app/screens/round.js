@@ -11,56 +11,39 @@ export class RoundScreen extends Component {
   componentWillMount() {
     const { params } = this.props.navigation.state;
 
-    if (params.rounds.length >= params.roundNum) {
-      // load round
-      var round = params.rounds[params.roundNum-1];
-      // TODO: update scores
-      var tb = round.reduce((sum, item) => {
-        return sum + item.bet;
-      }, 0);
-      this.setState({
-        currRound: round,
-        roundNum: params.roundNum,
-        totalBets: tb,
-        rounds: params.rounds,
-        totalRounds: params.totalRounds,
+    // =============== initialize round ==============
+    var newRound = null;
+    if (params.roundNum === 1) {
+      newRound = params.players.map((item, index) => {
+        return {
+          name: item.name,
+          index: index,
+          bet: 0,
+          hit: 0,
+          score: 0,
+        };
       });
-
-      console.log(`Round ${params.roundNum} loaded`);
     } else {
-      // initialize round
-      var newRound = null;
-      if (params.roundNum === 1) {
-        newRound = params.players.map((item, index) => {
-          return {
-            name: item.name,
-            index: index,
-            bet: 0,
-            hit: 0,
-            score: (params.roundNum === 1) ? 0 : (params.rounds[params.roundNum - 2][index].score),
-          };
-        });
-      } else {
-        newRound = params.rounds[params.roundNum-2].map((item, index) => {
-          return {
-            name: item.name,
-            index: item.index,
-            bet: 0,
-            hit: 0,
-            score: item.score,
-        }});
-      }
-
-      this.setState({
-        currRound: newRound,
-        roundNum: params.roundNum,
-        totalBets: 0,
-        rounds: params.rounds,
-        totalRounds: params.totalRounds,
-      });
-
-      console.log(`Round ${params.roundNum} initialized`);
+      newRound = params.rounds[params.roundNum-2].map((item, index) => {
+        return {
+          name: item.name,
+          index: item.index,
+          bet: 0,
+          hit: 0,
+          score: item.score,
+      }});
     }
+
+    this.setState({
+      currRound: newRound,
+      roundNum: params.roundNum,
+      totalBets: 0,
+      rounds: params.rounds,
+      totalRounds: params.totalRounds,
+      isFinal: false,
+    });
+
+    console.log(`Round ${params.roundNum} initialized`);
   }
 
   _onIncBet = (idx: number) => {
@@ -103,6 +86,7 @@ export class RoundScreen extends Component {
   }
 
   _renderItem = ({item}) => {
+    console.log(this.state.isFinal);
     return (
       <PlayerBet
         index={item.index}
@@ -111,6 +95,7 @@ export class RoundScreen extends Component {
         score={item.score}
         onIncBet={this._onIncBet}
         onDecBet={this._onDecBet}
+        isFinal={this.state.isFinal}
       />
     );
   };
@@ -118,14 +103,27 @@ export class RoundScreen extends Component {
   _finalize() {
     const { navigate } = this.props.navigation;
 
-    var newRounds = this.state.rounds.slice();
-    newRounds[this.state.roundNum-1] = this.state.currRound;
+    if (!this.state.isFinal) {
+      var newRounds = this.state.rounds.slice();
+      newRounds[this.state.roundNum-1] = this.state.currRound;
 
-    navigate('RoundResult', {
-      rounds: newRounds,
-      roundNum: this.state.roundNum,
-      totalRounds: this.state.totalRounds,
-    });
+      navigate('RoundResult', {
+        rounds: newRounds,
+        roundNum: this.state.roundNum,
+        totalRounds: this.state.totalRounds,
+      });
+
+      this.setState({
+        isFinal: true,
+        rounds: newRounds,
+      });
+    } else {
+      navigate('RoundResult', {
+        rounds: this.state.rounds,
+        roundNum: this.state.roundNum,
+        totalRounds: this.state.totalRounds,
+      })
+    }
   }
 
   render() {
@@ -136,11 +134,11 @@ export class RoundScreen extends Component {
       }}>
         <FlatList
           data={this.state.currRound}
-          renderItem={this._renderItem}
+          renderItem={this._renderItem.bind(this)}
           keyExtractor={(item, index) => item.index}
         />
         <Button
-          title='Place Bets'
+          title={ this.state.isFinal ? 'Continue' : 'Place Bets' }
           fontSize={24}
           raised
           buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
