@@ -1,61 +1,111 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button, Card } from 'react-native-elements';
+
+const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  subtitleText: {
+    fontSize: 16,
+    color: 'gray',
+  },
+  columnContainer: {
+    margin: 8,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  rowContainer: {
+    margin: 8,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  plusPointsText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'green',
+  },
+  minusPointsText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'red',
+  },
+  roundedCorners: {
+    borderRadius: 8,
+  },
+  fixedShortWidth: {
+    width: 24,
+  },
+  fixedLongWidth: {
+    width: 48,
+  }
+});
 
 export class PlayerHit extends Component {
   render() {
     return (
-      <View style={{
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
-        <View style={{
-          flex: 0.5,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          <Text style={{
-            fontSize: 20,
-            fontWeight: 'bold',
-          }}>
+      <Card
+        flexDirection='row'
+        containerStyle={
+          styles.roundedCorners
+        }>
+        <View style={
+          styles.columnContainer
+        }>
+          <Text style={ styles.titleText }>
             {this.props.name}
           </Text>
-          <Text>
-            {
-              `${this.props.score} ${(this.props.hit===this.props.bet)?'+':'-'} ${(this.props.hit===this.props.bet)?(20+10*this.props.hit):(10*Math.abs(this.props.bet-this.props.hit))}`
-              // this.props.score + ((this.props.hit === this.props.bet) ?
-              //   (20 + 10*this.props.hit) : (-10 * Math.abs(this.props.bet - this.props.hit)))
-            }
-          </Text>
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+          }}>
+            <Text style={ styles.subtitleText }>
+              { this.props.score }
+            </Text>
+            <Text style={ (this.props.points > 0) ? styles.plusPointsText : styles.minusPointsText }>
+              { `${(this.props.points > 0) ? '+' : ''}${this.props.points}` }
+            </Text>
+          </View>
         </View>
 
-        <View style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center'
-        }}>
-          <Button
-            color='#4CAF50'
-            icon={{
-              name: 'add-circle'
-            }}
-            onPress={() => this.props.onIncHit(this.props.index)}
-          />
-          <Text>
-            {`${this.props.hit} / ${this.props.bet}`}
-          </Text>
-          <Button
-            icon={{
-              name: 'remove-circle'
-            }}
-            color='#F44336'
-            onPress={() => this.props.onDecHit(this.props.index)}
-          />
+        <View style={
+          styles.columnContainer,
+          { flex: 1 }}>
+          <View style={{
+            margin: 8,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}>
+            <Button
+              raised
+              icon={{ name: 'remove-circle', size: 24 }}
+              buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
+              textStyle={{textAlign: 'center'}}
+              onPress={() => this.props.onDecHit(this.props.index)} />
+            <View style={ styles.fixedLongWidth }>
+              <Text style={{
+                textAlign: 'center',
+                fontSize: 16,
+                color: 'black',
+              }}>
+                {`${this.props.hit} / ${this.props.bet}`}
+              </Text>
+            </View>
+            <Button
+              raised
+              icon={{ name: 'add-circle', size: 24 }}
+              buttonStyle={{ backgroundColor: 'green', borderRadius: 4 }}
+              textStyle={{textAlign: 'center'}}
+              onPress={() => this.props.onIncHit(this.props.index)} />
+          </View>
         </View>
-      </View>
+      </Card>
     );
   }
 }

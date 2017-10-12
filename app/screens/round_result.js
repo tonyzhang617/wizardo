@@ -71,6 +71,7 @@ export class RoundResultScreen extends Component {
         name={ item.name }
         hit={ item.hit }
         bet={ item.bet }
+        points={ (item.hit === item.bet) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit)) }
         score={ item.score }
         onIncHit={this._onIncHit}
         onDecHit={this._onDecHit}
@@ -85,7 +86,7 @@ export class RoundResultScreen extends Component {
     if (!this.state.isFinal) {
       var newRounds = this.state.rounds.slice();
       newRounds[this.state.roundNum-1].forEach((item, index) => {
-        item.score += ((item.hit === item.bet)) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
+        item.score += (item.hit === item.bet) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
       });
 
       this.setState({
@@ -115,21 +116,13 @@ export class RoundResultScreen extends Component {
           data={this.state.currRound}
           renderItem={this._renderItem.bind(this)}
           keyExtractor={(item, index) => { return item.index; }}
-          renderSeparator={() => {
-            return (
-              <View
-                style={{
-                  height: 1,
-                  backgroundColor: "#CED0CE",
-                }}
-              />
-            );}
-          }
         />
         <Button
           title='Start Next Round'
-          backgroundColor='#F44336'
           fontSize={24}
+          raised
+          buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
+          textStyle={{textAlign: 'center'}}
           onPress={this._nextRound.bind(this)}
         />
       </View>

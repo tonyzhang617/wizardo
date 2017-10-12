@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   subtitleText: {
-    fontSize: 12,
+    fontSize: 16,
     color: 'gray',
   },
   columnContainer: {
