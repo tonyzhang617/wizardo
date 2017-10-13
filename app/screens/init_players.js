@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, FlatList, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
+import { ListItem } from '../components/list_item.js'
 
 export class InitPlayersScreen extends Component {
 
@@ -19,9 +20,7 @@ export class InitPlayersScreen extends Component {
 
   _renderItem({ item }) {
     return (
-      <Text>
-        {item.name}
-      </Text>
+      <ListItem title={item.name} />
     );
   }
 
@@ -66,8 +65,10 @@ export class InitPlayersScreen extends Component {
           <Button
             title={(this.state.players.length < minPlayerNum) ? 'Start' : `Start (${this.state.totalRounds} Rounds)`}
             disabled={(this.state.players.length < minPlayerNum) ? true : false}
-            backgroundColor='#2962FF'
             fontSize={24}
+            raised
+            buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
+            textStyle={{textAlign: 'center'}}
             onPress={() => navigate('Round', {
               currRound: 0,
               totalRounds: this.state.totalRounds,

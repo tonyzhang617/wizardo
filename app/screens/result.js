@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, FlatList, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
+import { ListItem } from '../components/list_item.js';
 
 export class ResultScreen extends Component {
 
-  static navigationOptions = ({navigation}) => ({
+  static navigationOptions = {
     title: 'Results',
-  });
+  };
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
@@ -17,23 +18,9 @@ export class ResultScreen extends Component {
   }
 
   _renderItem({ item }) {
-
     return (
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: 48
-      }}>
-        <Text style={{
-          fontWeight: 'bold',
-        }}>
-          {item.name}
-        </Text>
-        <Text>
-          {item.score}
-        </Text>
-      </View>
+      <ListItem title={item.name}
+        subtitle={item.score} />
     );
   }
 
