@@ -67,8 +67,8 @@ export class PlayerHit extends Component {
             <Text style={ styles.subtitleText }>
               { this.props.score }
             </Text>
-            <Text style={ (this.props.points > 0) ? styles.plusPointsText : styles.minusPointsText }>
-              { `${(this.props.points > 0) ? '+' : ''}${this.props.points}` }
+            <Text style={ (this.props.gain > 0) ? styles.plusPointsText : styles.minusPointsText }>
+              { `${(this.props.gain > 0) ? '+' : ''}${this.props.gain}` }
             </Text>
           </View>
         </View>

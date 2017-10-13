@@ -5,77 +5,73 @@ import { PlayerHit } from '../components/player_hit.js';
 
 export class RoundResultScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: `Round ${navigation.state.params.roundNum} Result`
+    title: `Round ${navigation.state.params.currRound+1} Result`
   });
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
 
-    // load round
-    var round = params.rounds[params.roundNum-1].slice();
-    var th = round.reduce((sum, item) => {
-      return sum + item.hit;
-    }, 0);
-    round.forEach(item => {
-      item.hit = item.bet;
+    var newPlayers = params.players.map(item => {
+      return {
+        name: item.name,
+        id: item.id,
+        bet: item.bet,
+        hit: item.bet,
+        gain: 20 + 10*item.bet,
+        score: item.score,
+      };
     });
 
     this.setState({
-      currRound: round,
-      roundNum: params.roundNum,
-      totalHits: th,
-      rounds: params.rounds,
+      players: newPlayers,
+      currRound: params.currRound,
       totalRounds: params.totalRounds,
-      isFinal: false,
-    });
-
-    console.log(`Round ${params.roundNum} results loaded`);
-  }
-
-  _onIncHit = (idx: number) => {
-    var newPlayers = this.state.currRound.slice();
-    for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].index === idx) {
-        if (newPlayers[i].hit < this.state.roundNum) {
-          newPlayers[i].hit += 1;
-        }
-        break;
-      }
-    }
-
-    this.setState({
-      currRound: newPlayers
     });
   }
 
-  _onDecHit = (idx: number) => {
-    var newPlayers = this.state.currRound.slice();
-    for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].index === idx) {
-        if (newPlayers[i].hit > 0) {
-          newPlayers[i].hit -= 1;
+  _onIncHit = (id: number) => {
+    var players = this.state.players.slice();
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].id === id) {
+        if (players[i].hit <= this.state.currRound) {
+          players[i].hit += 1;
+          players[i].gain = (players[i].hit === players[i].bet) ? (20 + 10*players[i].hit) : (-10 * Math.abs(players[i].bet - players[i].hit));
+          this.setState({
+            players: players,
+          });
+          return;
         }
-        break;
       }
     }
+  }
 
-    this.setState({
-      currRound: newPlayers
-    });
+  _onDecHit = (id: number) => {
+    var players = this.state.players.slice();
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].id === id) {
+        if (players[i].hit > 0) {
+          players[i].hit -= 1;
+          players[i].gain = (players[i].hit === players[i].bet) ? (20 + 10*players[i].hit) : (-10 * Math.abs(players[i].bet - players[i].hit));
+          this.setState({
+            players: players,
+          });
+          return;
+        }
+      }
+    }
   }
 
   _renderItem({ item }) {
     return (
       <PlayerHit
-        index={ item.index }
+        index={ item.id }
         name={ item.name }
         hit={ item.hit }
         bet={ item.bet }
-        points={ (item.hit === item.bet) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit)) }
+        gain={ item.gain }
         score={ item.score }
         onIncHit={this._onIncHit}
         onDecHit={this._onDecHit}
-        isFinal={this.state.isFinal}
       />
     );
   }
@@ -83,39 +79,36 @@ export class RoundResultScreen extends Component {
   _nextRound() {
     const { navigate } = this.props.navigation;
 
-    if (!this.state.isFinal) {
-      var newRounds = this.state.rounds.slice();
-      newRounds[this.state.roundNum-1].forEach((item, index) => {
-        item.score += (item.hit === item.bet) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
-      });
-
-      this.setState({
-        rounds: newRounds,
-        isFinal: true,
-      });
+    var newPlayers = [];
+    for (var i = 0; i < this.state.players.length; ++i) {
+      var tmpPlayer = { ... this.state.players[i] };
+      tmpPlayer.score += tmpPlayer.gain;
+      newPlayers.push(tmpPlayer);
     }
 
-    if (this.state.roundNum === this.state.totalRounds) {
+    if (this.state.currRound === this.state.totalRounds-1) {
       navigate('Result', {
         // TODO
-        players: newRounds,
+        players: this.state.players,
       });
     } else {
       navigate('Round', {
-        rounds: this.state.rounds,
-        roundNum: this.state.roundNum+1,
+        players: newPlayers,
+        currRound: this.state.currRound+1,
         totalRounds: this.state.totalRounds,
       });
     }
   }
 
   render() {
+    console.log(this.state);
+
     return (
       <View style={{flex: 1}}>
         <FlatList
-          data={this.state.currRound}
+          data={this.state.players}
           renderItem={this._renderItem.bind(this)}
-          keyExtractor={(item, index) => { return item.index; }}
+          keyExtractor={item => { return item.id; }}
         />
         <Button
           title='Start Next Round'

@@ -5,92 +5,64 @@ import { PlayerBet } from '../components/player_bet.js';
 
 export class RoundScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    title: `Round ${navigation.state.params.roundNum}`,
+    title: `Round ${navigation.state.params.currRound+1}`,
   });
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
 
-    // =============== initialize round ==============
-    var newRound = null;
-    if (params.roundNum === 1) {
-      newRound = params.players.map((item, index) => {
-        return {
-          name: item.name,
-          index: index,
-          bet: 0,
-          hit: 0,
-          score: 0,
-        };
-      });
-    } else {
-      newRound = params.rounds[params.roundNum-2].map((item, index) => {
-        return {
-          name: item.name,
-          index: item.index,
-          bet: 0,
-          hit: 0,
-          score: item.score,
-      }});
-    }
+    var newPlayers = params.players.map(item => {
+      return {
+        name: item.name,
+        id: item.id,
+        bet: 0,
+        score: ((params.currRound === 0) ? 0 : item.score),
+      };
+    });
 
-    var dealer = newRound.shift();
-    newRound.push(dealer);
+    newPlayers.push(newPlayers.shift());
 
     this.setState({
-      currRound: newRound,
-      roundNum: params.roundNum,
-      totalBets: 0,
-      rounds: params.rounds,
+      players: newPlayers,
       totalRounds: params.totalRounds,
-    });
-
-    console.log(`Round ${params.roundNum} initialized`);
-  }
-
-  _onIncBet = (idx: number) => {
-    var newPlayers = this.state.currRound.slice();
-    var newTotal = this.state.totalBets;
-    for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].index === idx) {
-        if (newPlayers[i].bet < this.state.roundNum) {
-          newPlayers[i].bet += 1;
-          newTotal += 1;
-        }
-        break;
-        // TODO: implement can't bet if total bets is round number
-      }
-    }
-
-    this.setState({
-      currRound: newPlayers,
-      totalBets: newTotal,
+      currRound: params.currRound,
     });
   }
 
-  _onDecBet = (idx: number) => {
-    var newPlayers = this.state.currRound.slice();
-    var newTotal = this.state.totalBets;
-    for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].index === idx) {
-        if (newPlayers[i].bet > 0) {
-          newPlayers[i].bet -= 1;
-          newTotal -= 1;
+  _onIncBet = (id: number) => {
+    var players = this.state.players.slice();
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].id === id) {
+        if (players[i].bet <= this.state.currRound) {
+          players[i].bet += 1;
+          this.setState({
+            players: players,
+          });
+          return;
         }
-        break;
       }
     }
+  }
 
-    this.setState({
-      currRound: newPlayers,
-      totalBets: newTotal,
-    });
+  _onDecBet = (id: number) => {
+    var players = this.state.players.slice();
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].id === id) {
+        if (players[i].bet > 0) {
+          players[i].bet -= 1;
+          this.setState({
+            players: players,
+          });
+          return;
+        }
+      }
+    }
   }
 
   _renderItem = ({item}) => {
     return (
       <PlayerBet
-        index={item.index}
+        index={item.id}
         name={item.name}
         bet={item.bet}
         score={item.score}
@@ -103,17 +75,15 @@ export class RoundScreen extends Component {
   _finalize() {
     const { navigate } = this.props.navigation;
 
-    var newRounds = this.state.rounds.slice();
-    newRounds[this.state.roundNum-1] = this.state.currRound;
+    var newPlayers = [];
+    for (var i = 0; i < this.state.players.length; ++i) {
+      newPlayers.push({ ... this.state.players[i] });
+    }
 
     navigate('RoundResult', {
-      rounds: newRounds,
-      roundNum: this.state.roundNum,
+      players: newPlayers,
+      currRound: this.state.currRound,
       totalRounds: this.state.totalRounds,
-    });
-
-    this.setState({
-      rounds: newRounds,
     });
   }
 
@@ -124,9 +94,9 @@ export class RoundScreen extends Component {
         flexDirection: 'column'
       }}>
         <FlatList
-          data={this.state.currRound}
+          data={this.state.players}
           renderItem={this._renderItem}
-          keyExtractor={(item, index) => item.index}
+          keyExtractor={item => item.id}
         />
         <Button
           title='Place Bets'
