@@ -1,88 +1,68 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, FlatList, Text, TextInput } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, StyleSheet, FlatList, ListView, Text, TextInput } from 'react-native';
+import { Button, Card } from 'react-native-elements';
 import { PlayerBet } from '../components/player_bet.js';
 
 export class RoundScreen extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      players: [],
-      roundNum: 0,
-      totalRounds: 0,
-      totalBets: 0,
-    };
-  }
-
   static navigationOptions = ({navigation}) => ({
-    title: `Round ${navigation.state.params.roundNum}`,
-    headerLeft: null,
+    title: `Round ${navigation.state.params.currRound+1}`,
   });
 
   componentWillMount() {
-    const { state } = this.props.navigation;
+    const { params } = this.props.navigation.state;
 
-    var newPlayers = state.params.players;
-    var dealer = newPlayers.shift();
-    newPlayers.push(dealer);
-
-    newPlayers.forEach((item) => {
-      item.bet = 0;
-      item.hit = 0;
+    var newPlayers = params.players.map(item => {
+      return {
+        name: item.name,
+        id: item.id,
+        bet: 0,
+        score: ((params.currRound === 0) ? 0 : item.score),
+      };
     });
+
+    newPlayers.push(newPlayers.shift());
 
     this.setState({
       players: newPlayers,
-      roundNum: state.params.roundNum,
-      totalRounds: state.params.totalRounds,
-      totalBets: 0,
+      totalRounds: params.totalRounds,
+      currRound: params.currRound,
     });
-
-    console.log(`Round ${state.params.roundNum} initialized`);
   }
 
-  componentWillUpdate() {
-    console.log('Round Screen updated');
-  }
-
-  _onIncBet = (playerId: number) => {
-    var newPlayers = this.state.players.slice();
-    for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].key === playerId) {
-        if (newPlayers[i].bet < this.state.roundNum) {
-          newPlayers[i].bet += 1;
+  _onIncBet = (id: number) => {
+    var players = this.state.players.slice();
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].id === id) {
+        if (players[i].bet <= this.state.currRound) {
+          players[i].bet += 1;
+          this.setState({
+            players: players,
+          });
+          return;
         }
-        // TODO: implement can't bet if total bets is round number
-        break;
       }
     }
-
-    this.setState({
-      players: newPlayers
-    });
   }
 
-  _onDecBet = (playerId: number) => {
-    var newPlayers = this.state.players.slice();
-    for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].key === playerId) {
-        if (newPlayers[i].bet > 0) {
-          newPlayers[i].bet -= 1;
+  _onDecBet = (id: number) => {
+    var players = this.state.players.slice();
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].id === id) {
+        if (players[i].bet > 0) {
+          players[i].bet -= 1;
+          this.setState({
+            players: players,
+          });
+          return;
         }
-        break;
       }
     }
-
-    this.setState({
-      players: newPlayers
-    });
   }
 
   _renderItem = ({item}) => {
     return (
       <PlayerBet
-        playerId={item.key}
+        index={item.id}
         name={item.name}
         bet={item.bet}
         score={item.score}
@@ -95,24 +75,35 @@ export class RoundScreen extends Component {
   _finalize() {
     const { navigate } = this.props.navigation;
 
+    var newPlayers = [];
+    for (var i = 0; i < this.state.players.length; ++i) {
+      newPlayers.push({ ... this.state.players[i] });
+    }
+
     navigate('RoundResult', {
-      players: this.state.players,
-      roundNum: this.state.roundNum,
+      players: newPlayers,
+      currRound: this.state.currRound,
       totalRounds: this.state.totalRounds,
     });
   }
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{
+        flex: 1,
+        flexDirection: 'column'
+      }}>
         <FlatList
           data={this.state.players}
           renderItem={this._renderItem}
+          keyExtractor={item => item.id}
         />
         <Button
-          title='Finalize'
-          backgroundColor='#F44336'
+          title='Place Bets'
           fontSize={24}
+          raised
+          buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
+          textStyle={{textAlign: 'center'}}
           onPress={this._finalize.bind(this)}
         />
       </View>

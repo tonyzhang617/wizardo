@@ -4,123 +4,118 @@ import { Button } from 'react-native-elements';
 import { PlayerHit } from '../components/player_hit.js';
 
 export class RoundResultScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      players: [],
-      roundNum: 0,
-      totalRounds: 0,
-    };
-  }
-
   static navigationOptions = ({ navigation }) => ({
-    title: `Round ${navigation.state.params.roundNum} Result`,
-    headerLeft: null,
+    title: `Round ${navigation.state.params.currRound+1} Result`
   });
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
 
-    var newPlayers = params.players.slice();
-    newPlayers.forEach((player) => {
-      player.hit = player.bet;
+    var newPlayers = params.players.map(item => {
+      return {
+        name: item.name,
+        id: item.id,
+        bet: item.bet,
+        hit: item.bet,
+        gain: 20 + 10*item.bet,
+        score: item.score,
+      };
     });
 
     this.setState({
       players: newPlayers,
-      roundNum: params.roundNum,
+      currRound: params.currRound,
       totalRounds: params.totalRounds,
     });
   }
 
-  _onIncHit = (playerId: number) => {
-    var newPlayers = this.state.players.slice();
-    for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].key === playerId) {
-        if (newPlayers[i].hit < this.state.roundNum) {
-          newPlayers[i].hit += 1;
+  _onIncHit = (id: number) => {
+    var players = this.state.players.slice();
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].id === id) {
+        if (players[i].hit <= this.state.currRound) {
+          players[i].hit += 1;
+          players[i].gain = (players[i].hit === players[i].bet) ? (20 + 10*players[i].hit) : (-10 * Math.abs(players[i].bet - players[i].hit));
+          this.setState({
+            players: players,
+          });
+          return;
         }
-        break;
       }
     }
-
-    this.setState({
-      players: newPlayers
-    });
   }
 
-  _onDecHit = (playerId: number) => {
-    var newPlayers = this.state.players.slice();
-    for (var i = 0; i < newPlayers.length; ++i) {
-      if (newPlayers[i].key === playerId) {
-        if (newPlayers[i].hit > 0) {
-          newPlayers[i].hit -= 1;
+  _onDecHit = (id: number) => {
+    var players = this.state.players.slice();
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].id === id) {
+        if (players[i].hit > 0) {
+          players[i].hit -= 1;
+          players[i].gain = (players[i].hit === players[i].bet) ? (20 + 10*players[i].hit) : (-10 * Math.abs(players[i].bet - players[i].hit));
+          this.setState({
+            players: players,
+          });
+          return;
         }
-        break;
       }
     }
-
-    this.setState({
-      players: newPlayers
-    });
   }
 
   _renderItem({ item }) {
     return (
       <PlayerHit
-        onIncHit={this._onIncHit}
-        onDecHit={this._onDecHit}
-        playerId={ item.key }
+        index={ item.id }
         name={ item.name }
         hit={ item.hit }
         bet={ item.bet }
+        gain={ item.gain }
         score={ item.score }
+        onIncHit={this._onIncHit}
+        onDecHit={this._onDecHit}
       />
     );
   }
 
   _nextRound() {
-    var newPlayers = this.state.players.slice();
-    newPlayers.forEach((item) => {
-      item.score += ((item.hit === item.bet)) ? (20 + 10*item.hit) : (-10 * Math.abs(item.bet - item.hit));
-    });
-
     const { navigate } = this.props.navigation;
 
-    if (this.state.roundNum === this.state.totalRounds) {
+    var newPlayers = [];
+    for (var i = 0; i < this.state.players.length; ++i) {
+      var tmpPlayer = { ... this.state.players[i] };
+      tmpPlayer.score += tmpPlayer.gain;
+      newPlayers.push(tmpPlayer);
+    }
+
+    if (this.state.currRound === this.state.totalRounds-1) {
       navigate('Result', {
-        players: newPlayers,
+        // TODO
+        players: this.state.players,
       });
     } else {
       navigate('Round', {
         players: newPlayers,
-        roundNum: this.state.roundNum+1,
+        currRound: this.state.currRound+1,
         totalRounds: this.state.totalRounds,
       });
     }
   }
 
   render() {
+    console.log(this.state);
+
     return (
       <View style={{flex: 1}}>
         <FlatList
           data={this.state.players}
           renderItem={this._renderItem.bind(this)}
-          renderSeparator={() => {
-            return (
-              <View
-                style={{
-                  height: 1,
-                  backgroundColor: "#CED0CE",
-                }}
-              />
-            );}
-          }
+          keyExtractor={item => { return item.id; }}
         />
         <Button
           title='Start Next Round'
-          backgroundColor='#F44336'
           fontSize={24}
+          raised
+          buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
+          textStyle={{textAlign: 'center'}}
           onPress={this._nextRound.bind(this)}
         />
       </View>
