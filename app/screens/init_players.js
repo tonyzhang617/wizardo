@@ -1,26 +1,35 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, FlatList, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
-import { ListItem } from '../components/list_item.js'
+import FAB from 'react-native-fab';
+import { ListItem } from '../components/list_item.js';
 
 export class InitPlayersScreen extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      currInput: 'New Player',
+      currInput: '',
       players: [],
       totalRounds: null,
     };
   }
 
   static navigationOptions = {
-    title: 'Add Players'
+    title: 'Add Players',
+    headerLeft: null,
   };
 
   _renderItem({ item }) {
     return (
-      <ListItem title={item.name} />
+      <Text style={{
+        flex: 1,
+        textAlign: 'center',
+        fontSize: 24,
+        color: 'black',
+        margin: 4,
+      }}>
+        {item.name}
+      </Text>
     );
   }
 
@@ -34,6 +43,10 @@ export class InitPlayersScreen extends Component {
         <TextInput
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           value={this.state.currInput}
+          autoCapitalize='words'
+          autoCorrect={false}
+          returnKeyType='done'
+          placeholder={(this.state.players.length === 0) ? 'Enter the first dealer' : 'Enter the next dealer'}
           onChangeText={
             (text) => {
               this.setState({
@@ -59,24 +72,40 @@ export class InitPlayersScreen extends Component {
         <FlatList
           data={ this.state.players }
           renderItem={this._renderItem}
+          renderSeparator={() => {
+            return (
+              <View
+                style={{
+                  height: 1,
+                  backgroundColor: '#CED0CE',
+                }}
+              />
+            );
+          }}
           keyExtractor={(item, index) => { return item.id; }}
         />
-        <View>
-          <Button
-            title={(this.state.players.length < minPlayerNum) ? 'Start' : `Start (${this.state.totalRounds} Rounds)`}
-            disabled={(this.state.players.length < minPlayerNum) ? true : false}
-            fontSize={24}
-            raised
-            buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
-            textStyle={{textAlign: 'center'}}
-            onPress={() => navigate('Round', {
-              currRound: 0,
-              totalRounds: this.state.totalRounds,
-              players: this.state.players,
-              rounds: [],
-            })}
-          />
-        </View>
+        <Text style={{
+          textAlign: 'center',
+          fontSize: 12,
+          color: 'gray',
+          marginBottom: 4,
+        }}>
+          {(this.state.players.length >= minPlayerNum) ? `${this.state.totalRounds} rounds in total` : 'Add players to start the game'}
+        </Text>
+
+        <FAB
+          buttonColor='red'
+          iconTextColor='#FFFFFF'
+          onClickAction={() => navigate('Round', {
+            currRound: 0,
+            totalRounds: this.state.totalRounds,
+            players: this.state.players,
+          })}
+          visible={ (this.state.players.length >= minPlayerNum) ? true : false }
+          iconTextComponent={
+            <Text>Go!</Text>
+          }
+        />
       </View>
     );
   }

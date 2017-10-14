@@ -11,7 +11,9 @@ export class RoundResultScreen extends Component {
   componentWillMount() {
     const { params } = this.props.navigation.state;
 
+    var totalHits = 0;
     var newPlayers = params.players.map(item => {
+      totalHits += item.bet;
       return {
         name: item.name,
         id: item.id,
@@ -26,6 +28,7 @@ export class RoundResultScreen extends Component {
       players: newPlayers,
       currRound: params.currRound,
       totalRounds: params.totalRounds,
+      totalHits: totalHits,
     });
   }
 
@@ -38,6 +41,7 @@ export class RoundResultScreen extends Component {
           players[i].gain = (players[i].hit === players[i].bet) ? (20 + 10*players[i].hit) : (-10 * Math.abs(players[i].bet - players[i].hit));
           this.setState({
             players: players,
+            totalHits: this.state.totalHits+1,
           });
           return;
         }
@@ -54,6 +58,7 @@ export class RoundResultScreen extends Component {
           players[i].gain = (players[i].hit === players[i].bet) ? (20 + 10*players[i].hit) : (-10 * Math.abs(players[i].bet - players[i].hit));
           this.setState({
             players: players,
+            totalHits: this.state.totalHits-1,
           });
           return;
         }
@@ -110,8 +115,17 @@ export class RoundResultScreen extends Component {
           renderItem={this._renderItem.bind(this)}
           keyExtractor={item => { return item.id; }}
         />
+        <Text style={{
+          textAlign: 'center',
+          fontSize: 12,
+          color: 'gray',
+          marginBottom: 4,
+        }}>
+          {`${this.state.totalHits} win(s) in total.`}
+        </Text>
         <Button
-          title='Start Next Round'
+          title={(this.state.currRound === this.state.totalRounds-1) ? 'Finish Game' : 'Start Next Round'}
+          disabled={(this.state.totalHits !== this.state.currRound+1) ? true : false}
           fontSize={24}
           raised
           buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}

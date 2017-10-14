@@ -26,6 +26,7 @@ export class RoundScreen extends Component {
       players: newPlayers,
       totalRounds: params.totalRounds,
       currRound: params.currRound,
+      totalBets: 0,
     });
   }
 
@@ -37,6 +38,7 @@ export class RoundScreen extends Component {
           players[i].bet += 1;
           this.setState({
             players: players,
+            totalBets: this.state.totalBets+1,
           });
           return;
         }
@@ -52,6 +54,7 @@ export class RoundScreen extends Component {
           players[i].bet -= 1;
           this.setState({
             players: players,
+            totalBets: this.state.totalBets-1,
           });
           return;
         }
@@ -88,6 +91,9 @@ export class RoundScreen extends Component {
   }
 
   render() {
+    var lastPlayer = this.state.players[this.state.players.length-1];
+    var cannotBet = this.state.currRound + 1 - this.state.totalBets + lastPlayer.bet;
+
     return (
       <View style={{
         flex: 1,
@@ -98,9 +104,18 @@ export class RoundScreen extends Component {
           renderItem={this._renderItem}
           keyExtractor={item => item.id}
         />
+        <Text style={{
+          textAlign: 'center',
+          fontSize: 12,
+          color: 'gray',
+          marginBottom: 4,
+        }}>
+          {`${this.state.totalBets} bet(s) in total. ${(cannotBet < 0) ? lastPlayer.name+' can bet anything.' : lastPlayer.name+' cannot bet ' + cannotBet + '.'}`}
+        </Text>
         <Button
           title='Place Bets'
           fontSize={24}
+          disabled={ (lastPlayer.bet === cannotBet) ? true : false }
           raised
           buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
           textStyle={{textAlign: 'center'}}
