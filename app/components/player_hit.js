@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Button, Card } from 'react-native-elements';
+import { Button, Card, Badge } from 'react-native-elements';
 
 const styles = StyleSheet.create({
   titleText: {
@@ -10,19 +10,25 @@ const styles = StyleSheet.create({
   },
   subtitleText: {
     fontSize: 16,
-    color: 'gray',
+    color: 'black',
   },
   columnContainer: {
-    margin: 8,
+    margin: 4,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   rowContainer: {
-    margin: 8,
+    margin: 4,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  gain: {
+    backgroundColor: 'green',
+  },
+  lose: {
+    backgroundColor: 'red',
   },
   plusPointsText: {
     fontSize: 16,
@@ -64,12 +70,22 @@ export class PlayerHit extends Component {
             justifyContent: 'flex-start',
             alignItems: 'center',
           }}>
-            <Text style={ styles.subtitleText }>
-              { this.props.score }
+            <Text style={
+              styles.subtitleText, {
+                marginRight: 4,
+                fontWeight: 'bold',
+              }}>
+              {this.props.score}
             </Text>
-            <Text style={ (this.props.gain > 0) ? styles.plusPointsText : styles.minusPointsText }>
-              { `${(this.props.gain > 0) ? '+' : ''}${this.props.gain}` }
-            </Text>
+            <Badge
+              value={ `${(this.props.gain > 0) ? '+' : ''}${this.props.gain}` }
+              textStyle={styles.subtitleText, {
+                color: 'white'
+              }}
+              containerStyle={
+                (this.props.gain > 0) ? styles.gain : styles.lose
+              }>
+            </Badge>
           </View>
         </View>
 
@@ -77,7 +93,7 @@ export class PlayerHit extends Component {
           styles.columnContainer,
           { flex: 1 }}>
           <View style={{
-            margin: 8,
+            margin: 4,
             flexDirection: 'row',
             justifyContent: 'flex-end',
             alignItems: 'center',
