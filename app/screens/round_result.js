@@ -106,8 +106,6 @@ export class RoundResultScreen extends Component {
   }
 
   render() {
-    console.log(this.state);
-
     return (
       <View style={{flex: 1}}>
         <FlatList
