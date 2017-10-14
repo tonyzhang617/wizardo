@@ -56,9 +56,14 @@ export class InitPlayersScreen extends Component {
           }
           onSubmitEditing={
             (event) => {
+              var name = event.nativeEvent.text.trim();
+              if (name === '') {
+                return;
+              }
+
               var newPlayer = {
                 id: (this.state.players.length === 0) ? 0 : this.state.players[this.state.players.length - 1].id + 1,
-                name: event.nativeEvent.text,
+                name: name,
               };
 
               this.setState({
