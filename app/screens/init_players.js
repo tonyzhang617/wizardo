@@ -26,7 +26,7 @@ export class InitPlayersScreen extends Component {
         textAlign: 'center',
         fontSize: 24,
         color: 'black',
-        margin: 4,
+        padding: 8,
       }}>
         {item.name}
       </Text>
@@ -77,7 +77,7 @@ export class InitPlayersScreen extends Component {
         <FlatList
           data={ this.state.players }
           renderItem={this._renderItem}
-          renderSeparator={() => {
+          ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
