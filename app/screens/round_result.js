@@ -86,15 +86,14 @@ export class RoundResultScreen extends Component {
 
     var newPlayers = [];
     for (var i = 0; i < this.state.players.length; ++i) {
-      var tmpPlayer = { ... this.state.players[i] };
+      var tmpPlayer = { ...this.state.players[i] };
       tmpPlayer.score += tmpPlayer.gain;
       newPlayers.push(tmpPlayer);
     }
 
     if (this.state.currRound === this.state.totalRounds-1) {
       navigate('Result', {
-        // TODO
-        players: this.state.players,
+        players: newPlayers,
       });
     } else {
       navigate('Round', {
