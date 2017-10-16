@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, FlatList, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
 import FAB from 'react-native-fab';
+import Swipeout from 'react-native-swipeout';
 import { ListItem } from '../components/list_item.js';
 
 export class InitPlayersScreen extends Component {
@@ -12,6 +13,8 @@ export class InitPlayersScreen extends Component {
       players: [],
       totalRounds: null,
     };
+    this._renderItem = this._renderItem.bind(this);
+    this._removePlayer = this._removePlayer.bind(this);
   }
 
   static navigationOptions = {
@@ -19,17 +22,36 @@ export class InitPlayersScreen extends Component {
     headerLeft: null,
   };
 
+  _removePlayer(id: number) {
+    var newPlayers = this.state.players.filter((player) => {
+      return player.id !== id;
+    });
+    this.setState({
+      players: newPlayers,
+    });
+  }
+
   _renderItem({ item }) {
     return (
-      <Text style={{
+      <Swipeout style={{
         flex: 1,
-        textAlign: 'center',
-        fontSize: 24,
-        color: 'black',
-        padding: 8,
-      }}>
-        {item.name}
-      </Text>
+        backgroundColor: 'transparent',
+      }} right={[{
+        text: 'Delete',
+        type: 'delete',
+        onPress: () => {
+          this._removePlayer(item.id);
+        }
+      }]}>
+        <Text style={{
+          textAlign: 'center',
+          fontSize: 24,
+          color: 'black',
+          padding: 8,
+        }}>
+          {item.name}
+        </Text>
+      </Swipeout>
     );
   }
 
