@@ -1,6 +1,7 @@
 # Wizardo App
 <image
 	align="left"
+  width="96"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/wizard.jpg" />
 <p>
 Wizardo is a score keeping app for the fun and intense card game Wizard. Built in React Native, it works both on iOS and Android.  
@@ -19,19 +20,24 @@ Wizardo is a score keeping app for the fun and intense card game Wizard. Built i
 2. Scan the QR code on the right
 <image
   align="right"
+  width="48"
   src="https://github.com/tonyzhang617/wizardo/blob/master/assets/qr-code.png" />
 3. Enjoy!
 
 # Screenshots
 <image
   align="left"
+  width="48"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot1.png" />
 <image
   align="left"
+  width="48"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot2.png" />
 <image
 	align="left"
+  width="48"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot3.png" />
 <image
 	align="left"
+  width="48"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot4.png" />
