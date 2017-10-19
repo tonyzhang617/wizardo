@@ -9,8 +9,8 @@
   </p>
 </div>
 
-# How to Get It
 <div>
+# How to Get It
   1. Get the Expo App
   <p>
   <a href="https://itunes.apple.com/app/apple-store/id982107779?ct=www&amp;mt=8">
@@ -20,7 +20,7 @@
     <img src="https://d30j33t1r58ioz.cloudfront.net/static/download-google.png?ed86e2c798c0ebfc1e62be74f1f8dfcc" alt="Google Play Store">
   </a>
   </p>
-  2. Scan the QR code on the right
+  2. Open the Expo App and scan the QR code on the right
   <image
     align="right"
     width="96"
