@@ -9,8 +9,8 @@
   </p>
 </div>
 
-<div>
 # How to Get It
+<div>
   1. Get the Expo App
   <p>
   <a href="https://itunes.apple.com/app/apple-store/id982107779?ct=www&amp;mt=8">
