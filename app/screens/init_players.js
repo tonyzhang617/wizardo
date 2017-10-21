@@ -31,7 +31,7 @@ export class InitPlayersScreen extends Component {
     });
   }
 
-  _renderItem({ item }) {
+  _renderItem(item) {
     return (
       <Swipeout style={{
         flex: 1,
@@ -98,7 +98,7 @@ export class InitPlayersScreen extends Component {
         />
         <FlatList
           data={ this.state.players }
-          renderItem={this._renderItem}
+          renderItem={({item}) => this._renderItem(item)}
           ItemSeparatorComponent={() => {
             return (
               <View

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, FlatList, ListView, Text, TextInput } from 'react-native';
 import { Button, Card } from 'react-native-elements';
 import { PlayerBet } from '../components/player_bet.js';
+import Rankings from '../components/rankings.js';
 import SideMenu from 'react-native-side-menu';
 
 export class RoundScreen extends Component {
@@ -96,11 +97,12 @@ export class RoundScreen extends Component {
     var cannotBet = this.state.currRound + 1 - this.state.totalBets + lastPlayer.bet;
 
     return (
-      <SideMenu menu={<Text>hello world</Text>}>
-        <View style={{
-          flex: 1,
-          flexDirection: 'column'
-        }}>
+      <SideMenu menu={<Rankings players={this.state.players} />}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column'
+          }}>
           <FlatList
             data={this.state.players}
             renderItem={this._renderItem}
