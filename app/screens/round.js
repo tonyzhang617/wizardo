@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, FlatList, ListView, Text, TextInput } from 'react-native';
 import { Button, Card } from 'react-native-elements';
 import { PlayerBet } from '../components/player_bet.js';
+import SideMenu from 'react-native-side-menu';
 
 export class RoundScreen extends Component {
   static navigationOptions = ({navigation}) => ({
@@ -95,33 +96,35 @@ export class RoundScreen extends Component {
     var cannotBet = this.state.currRound + 1 - this.state.totalBets + lastPlayer.bet;
 
     return (
-      <View style={{
-        flex: 1,
-        flexDirection: 'column'
-      }}>
-        <FlatList
-          data={this.state.players}
-          renderItem={this._renderItem}
-          keyExtractor={item => item.id}
-        />
-        <Text style={{
-          textAlign: 'center',
-          fontSize: 12,
-          color: 'gray',
-          marginBottom: 4,
+      <SideMenu menu={<Text>hello world</Text>}>
+        <View style={{
+          flex: 1,
+          flexDirection: 'column'
         }}>
-          {`${this.state.totalBets} bet(s) in total. ${(cannotBet < 0) ? lastPlayer.name+' can bet anything.' : lastPlayer.name+' cannot bet ' + cannotBet + '.'}`}
-        </Text>
-        <Button
-          title='Place Bets'
-          fontSize={24}
-          disabled={ (lastPlayer.bet === cannotBet) ? true : false }
-          raised
-          buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
-          textStyle={{textAlign: 'center'}}
-          onPress={this._finalize.bind(this)}
-        />
-      </View>
+          <FlatList
+            data={this.state.players}
+            renderItem={this._renderItem}
+            keyExtractor={item => item.id}
+          />
+          <Text style={{
+            textAlign: 'center',
+            fontSize: 12,
+            color: 'gray',
+            marginBottom: 4,
+          }}>
+            {`${this.state.totalBets} bet(s) in total. ${(cannotBet < 0) ? lastPlayer.name+' can bet anything.' : lastPlayer.name+' cannot bet ' + cannotBet + '.'}`}
+          </Text>
+          <Button
+            title='Place Bets'
+            fontSize={24}
+            disabled={ (lastPlayer.bet === cannotBet) ? true : false }
+            raised
+            buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
+            textStyle={{textAlign: 'center'}}
+            onPress={this._finalize.bind(this)}
+          />
+        </View>
+      </SideMenu>
     );
   }
 }
