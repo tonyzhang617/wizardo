@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, Card } from 'react-native-elements';
+import IconButton from './icon_button.js';
 
 const styles = StyleSheet.create({
   titleText: {
@@ -51,28 +52,23 @@ export class PlayerBet extends Component {
             justifyContent: 'flex-end',
             alignItems: 'center',
           }}>
-            <Button
-              disabled={ this.props.isFinal ? true : false }
-              raised
-              icon={{ name: 'remove-circle', size: 24 }}
-              buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
-              textStyle={{textAlign: 'center'}}
+            <IconButton
+              icon='remove'
+              color='red'
               onPress={() => this.props.onDecBet(this.props.index)} />
-              <View style={ styles.fixedWidth }>
+              <View>
                 <Text style={{
                   textAlign: 'center',
+                  width: 48,
                   fontSize: 16,
                   color: 'black'
                 }}>
                   {this.props.bet}
                 </Text>
               </View>
-            <Button
-              disabled={ this.props.isFinal ? true : false }
-              raised
-              icon={{ name: 'add-circle', size: 24 }}
-              buttonStyle={{ backgroundColor: 'green', borderRadius: 4 }}
-              textStyle={{textAlign: 'center'}}
+            <IconButton
+              icon='add'
+              color='green'
               onPress={() => this.props.onIncBet(this.props.index)} />
           </View>
         </View>
