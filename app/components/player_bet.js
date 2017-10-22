@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   roundedCorners: {
-    borderRadius: 8
+    borderRadius: 4
   },
   fixedWidth: {
     width: 24,
@@ -56,16 +56,14 @@ export class PlayerBet extends Component {
               icon='remove'
               color='red'
               onPress={() => this.props.onDecBet(this.props.index)} />
-              <View>
-                <Text style={{
-                  textAlign: 'center',
-                  width: 48,
-                  fontSize: 16,
-                  color: 'black'
-                }}>
-                  {this.props.bet}
-                </Text>
-              </View>
+              <Text style={{
+                textAlign: 'center',
+                width: 48,
+                fontSize: 16,
+                color: 'black'
+              }}>
+                {this.props.bet}
+              </Text>
             <IconButton
               icon='add'
               color='green'

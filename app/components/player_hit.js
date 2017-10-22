@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, Card, Badge } from 'react-native-elements';
+import IconButton from './icon_button.js';
 
 const styles = StyleSheet.create({
   titleText: {
@@ -13,16 +14,9 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   columnContainer: {
-    margin: 4,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
-  },
-  rowContainer: {
-    margin: 4,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
   },
   gain: {
     backgroundColor: 'green',
@@ -41,7 +35,7 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   roundedCorners: {
-    borderRadius: 8,
+    borderRadius: 4
   },
   fixedShortWidth: {
     width: 24,
@@ -58,7 +52,11 @@ export class PlayerHit extends Component {
         flexDirection='row'
         containerStyle={
           styles.roundedCorners
-        }>
+        }
+        wrapperStyle={{
+          justifyContent: 'flex-start',
+          alignItems: 'center'
+        }}>
         <View style={
           styles.columnContainer
         }>
@@ -93,31 +91,26 @@ export class PlayerHit extends Component {
           styles.columnContainer,
           { flex: 1 }}>
           <View style={{
-            margin: 4,
+            flex: 1,
             flexDirection: 'row',
             justifyContent: 'flex-end',
             alignItems: 'center',
           }}>
-            <Button
-              raised
-              icon={{ name: 'remove-circle', size: 24 }}
-              buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
-              textStyle={{textAlign: 'center'}}
+            <IconButton
+              icon='remove'
+              color='red'
               onPress={() => this.props.onDecHit(this.props.index)} />
-            <View style={ styles.fixedLongWidth }>
               <Text style={{
                 textAlign: 'center',
                 fontSize: 16,
                 color: 'black',
+                width: 56
               }}>
                 {`${this.props.hit} / ${this.props.bet}`}
               </Text>
-            </View>
-            <Button
-              raised
-              icon={{ name: 'add-circle', size: 24 }}
-              buttonStyle={{ backgroundColor: 'green', borderRadius: 4 }}
-              textStyle={{textAlign: 'center'}}
+            <IconButton
+              icon='add'
+              color='green'
               onPress={() => this.props.onIncHit(this.props.index)} />
           </View>
         </View>
