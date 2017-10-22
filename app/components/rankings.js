@@ -41,9 +41,17 @@ export default class Rankings extends Component {
   }
 
   render() {
+    var sortedPlayers = [];
+    for (var i = 0; i < this.props.players.length; ++i) {
+      sortedPlayers.push({ ...this.props.players[i] });
+    }
+    sortedPlayers.sort((lhs, rhs) => {
+      return rhs.score - lhs.score;
+    });
+
     return (
       <FlatList
-        data={ this.props.players }
+        data={ sortedPlayers }
         renderItem={({item}) => this._renderItem(item) }
         ItemSeparatorComponent={() => {
           return (
