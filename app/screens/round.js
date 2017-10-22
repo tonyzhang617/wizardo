@@ -117,7 +117,7 @@ export class RoundScreen extends Component {
             color: 'gray',
             marginBottom: 4,
           }}>
-            {`${this.state.totalBets} bet(s) in total. ${(cannotBet < 0) ? lastPlayer.name+' can bet anything.' : lastPlayer.name+' cannot bet ' + cannotBet + '.'}`}
+            {`Swipe from the left edge to view player standings.\n${this.state.totalBets} bet(s) in total. ${(cannotBet < 0) ? lastPlayer.name+' can bet anything.' : lastPlayer.name+' cannot bet ' + cannotBet + '.'}`}
           </Text>
           <Button
             title='Place Bets'

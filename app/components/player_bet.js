@@ -13,19 +13,12 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   columnContainer: {
-    margin: 8,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
-  rowContainer: {
-    margin: 8,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   roundedCorners: {
-    borderRadius: 8,
+    borderRadius: 8
   },
   fixedWidth: {
     width: 24,
@@ -39,23 +32,21 @@ export class PlayerBet extends Component {
         flexDirection='row'
         containerStyle={
           styles.roundedCorners
+        }
+        wrapperStyle={{
+          justifyContent: 'flex-start',
+          alignItems: 'center'
+        }}>
+        <Text style={
+          styles.titleText
         }>
-        <View style={
-          styles.columnContainer
-        }>
-          <Text style={ styles.titleText }>
-            { this.props.name }
-          </Text>
-          <Text style={ styles.subtitleText }>
-            { this.props.score }
-          </Text>
-        </View>
+          { this.props.name }
+        </Text>
         <View style={
           styles.columnContainer,
           { flex: 1 }
         }>
           <View style={{
-            margin: 8,
             flexDirection: 'row',
             justifyContent: 'flex-end',
             alignItems: 'center',
