@@ -106,7 +106,7 @@ export class RoundResultScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#E8EAF6'}}>
         <FlatList
           data={this.state.players}
           renderItem={this._renderItem.bind(this)}

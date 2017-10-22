@@ -97,11 +97,14 @@ export class RoundScreen extends Component {
     var cannotBet = this.state.currRound + 1 - this.state.totalBets + lastPlayer.bet;
 
     return (
-      <SideMenu menu={<Rankings players={this.state.players} />}>
+      <SideMenu
+        menu={<Rankings players={this.state.players} />}
+        menuPosition='left'>
         <View
           style={{
             flex: 1,
-            flexDirection: 'column'
+            flexDirection: 'column',
+            backgroundColor: '#E8EAF6'
           }}>
           <FlatList
             data={this.state.players}

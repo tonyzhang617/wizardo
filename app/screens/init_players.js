@@ -61,7 +61,7 @@ export class InitPlayersScreen extends Component {
     const minPlayerNum = 2;
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#E8EAF6'}}>
         <TextInput
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           value={this.state.currInput}

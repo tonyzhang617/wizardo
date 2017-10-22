@@ -36,6 +36,7 @@ export class ResultScreen extends Component {
     return (
       <View style={{
         flex: 1,
+        backgroundColor: '#E8EAF6'
       }}>
         <FlatList
           data={this.state.players}
