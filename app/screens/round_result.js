@@ -111,7 +111,7 @@ export class RoundResultScreen extends Component {
       <SideMenu
         menu={<Rankings players={this.state.players} />}
         menuPosition='right'
-        edgeHitWidth={480}>
+        edgeHitWidth={64}>
         <View style={{flex: 1, backgroundColor: '#E8EAF6'}}>
           <FlatList
             data={this.state.players}
