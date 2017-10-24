@@ -99,7 +99,8 @@ export class RoundScreen extends Component {
     return (
       <SideMenu
         menu={<Rankings players={this.state.players} />}
-        menuPosition='right'>
+        menuPosition='right'
+        edgeHitWidth={480}>
         <View
           style={{
             flex: 1,

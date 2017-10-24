@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { View, StyleSheet, FlatList, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
 import { PlayerHit } from '../components/player_hit.js';
+import Rankings from '../components/rankings.js';
+import SideMenu from 'react-native-side-menu';
 
 export class RoundResultScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -106,30 +108,35 @@ export class RoundResultScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: '#E8EAF6'}}>
-        <FlatList
-          data={this.state.players}
-          renderItem={this._renderItem.bind(this)}
-          keyExtractor={item => { return item.id; }}
-        />
-        <Text style={{
-          textAlign: 'center',
-          fontSize: 12,
-          color: 'gray',
-          marginBottom: 4,
-        }}>
-          {`${this.state.totalHits} win(s) in total.`}
-        </Text>
-        <Button
-          title={(this.state.currRound === this.state.totalRounds-1) ? 'Finish Game' : 'Start Next Round'}
-          disabled={(this.state.totalHits !== this.state.currRound+1) ? true : false}
-          fontSize={24}
-          raised
-          buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
-          textStyle={{textAlign: 'center'}}
-          onPress={this._nextRound.bind(this)}
-        />
-      </View>
+      <SideMenu
+        menu={<Rankings players={this.state.players} />}
+        menuPosition='right'
+        edgeHitWidth={480}>
+        <View style={{flex: 1, backgroundColor: '#E8EAF6'}}>
+          <FlatList
+            data={this.state.players}
+            renderItem={this._renderItem.bind(this)}
+            keyExtractor={item => { return item.id; }}
+          />
+          <Text style={{
+            textAlign: 'center',
+            fontSize: 12,
+            color: 'gray',
+            marginBottom: 4,
+          }}>
+            {`${this.state.totalHits} win(s) in total.`}
+          </Text>
+          <Button
+            title={(this.state.currRound === this.state.totalRounds-1) ? 'Finish Game' : 'Start Next Round'}
+            disabled={(this.state.totalHits !== this.state.currRound+1) ? true : false}
+            fontSize={24}
+            raised
+            buttonStyle={{ backgroundColor: 'red', borderRadius: 4 }}
+            textStyle={{textAlign: 'center'}}
+            onPress={this._nextRound.bind(this)}
+          />
+        </View>
+      </SideMenu>
     );
   }
 }
