@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, FlatList, Text, TextInput } from 'react-native';
+import { View, StyleSheet, Image, FlatList, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
 import FAB from 'react-native-fab';
 import Swipeout from 'react-native-swipeout';
@@ -61,7 +61,16 @@ export class InitPlayersScreen extends Component {
     const minPlayerNum = 2;
 
     return (
-      <View style={{flex: 1, backgroundColor: '#E8EAF6'}}>
+      <Image
+        source={require('../../assets/wizard-bg.png')}
+        style={{
+          flex: 1,
+          backgroundColor: '#FFFFFF',
+          width: undefined,
+          height: undefined
+        }}
+        resizeMode="contain"
+      >
         <TextInput
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           value={this.state.currInput}
@@ -133,7 +142,7 @@ export class InitPlayersScreen extends Component {
             <Text>Go!</Text>
           }
         />
-      </View>
+      </Image>
     );
   }
 }
