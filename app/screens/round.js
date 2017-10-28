@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, FlatList, ListView, Text, TextInput } from 'react-native';
+import { View, StyleSheet, FlatList, ListView, Image, Text, TextInput } from 'react-native';
 import { Button, Card } from 'react-native-elements';
 import { PlayerBet } from '../components/player_bet.js';
 import Rankings from '../components/rankings.js';
@@ -101,16 +101,30 @@ export class RoundScreen extends Component {
         menu={<Rankings players={this.state.players} />}
         menuPosition='right'
         edgeHitWidth={64}>
-        <View
+        <Image
+          source={require('../../assets/wizard-bg.png')}
           style={{
             flex: 1,
+            backgroundColor: '#FFFFFF',
+            width: undefined,
+            height: undefined,
             flexDirection: 'column',
-            backgroundColor: '#E8EAF6'
-          }}>
+          }}
+          resizeMode="contain">
           <FlatList
             data={this.state.players}
             renderItem={this._renderItem}
             keyExtractor={item => item.id}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: '#CED0CE',
+                  }}
+                />
+              );
+            }}
           />
           <Text style={{
             textAlign: 'center',
@@ -129,7 +143,7 @@ export class RoundScreen extends Component {
             textStyle={{textAlign: 'center'}}
             onPress={this._finalize.bind(this)}
           />
-        </View>
+        </Image>
       </SideMenu>
     );
   }

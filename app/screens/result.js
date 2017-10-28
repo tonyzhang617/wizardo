@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, FlatList, Text, TextInput, Button } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Image, TextInput, Button } from 'react-native';
 import { ListItem } from '../components/list_item.js';
 
 export class ResultScreen extends Component {
@@ -34,18 +34,34 @@ export class ResultScreen extends Component {
 
   render() {
     return (
-      <View style={{
-        flex: 1,
-        backgroundColor: '#E8EAF6'
-      }}>
+      <Image
+        source={require('../../assets/wizard-bg.png')}
+        style={{
+          flex: 1,
+          backgroundColor: '#FFFFFF',
+          width: undefined,
+          height: undefined,
+          flexDirection: 'column',
+        }}
+        resizeMode="contain">
         <FlatList
           data={this.state.players}
           renderItem={this._renderItem}
           keyExtractor={item => {
             return item.id;
           }}
+          ItemSeparatorComponent={() => {
+            return (
+              <View
+                style={{
+                  height: 1,
+                  backgroundColor: '#CED0CE',
+                }}
+              />
+            );
+          }}
         />
-      </View>
+      </Image>
     );
   }
 }

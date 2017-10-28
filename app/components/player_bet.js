@@ -29,14 +29,13 @@ const styles = StyleSheet.create({
 export class PlayerBet extends Component {
   render() {
     return (
-      <Card
-        flexDirection='row'
-        containerStyle={
-          styles.roundedCorners
-        }
-        wrapperStyle={{
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
           justifyContent: 'flex-start',
-          alignItems: 'center'
+          alignItems: 'center',
+          padding: 8,
         }}>
         <Text style={
           styles.titleText
@@ -70,7 +69,7 @@ export class PlayerBet extends Component {
               onPress={() => this.props.onIncBet(this.props.index)} />
           </View>
         </View>
-      </Card>
+      </View>
     );
   }
 }

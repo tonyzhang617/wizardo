@@ -5,13 +5,13 @@ import { Button, Card } from 'react-native-elements';
 export class ListItem extends Component {
   render() {
     return (
-      <Card
-        flexDirection='row'
-        containerStyle={{
-          borderRadius: 8
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          padding: 8
         }}>
         <View style={{
-          margin: 8,
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'flex-start',
@@ -25,7 +25,6 @@ export class ListItem extends Component {
           </Text>
         </View>
         <View style={{
-          margin: 8,
           flex: 1,
           flexDirection: 'column',
           justifyContent: 'center',
@@ -38,7 +37,7 @@ export class ListItem extends Component {
             {this.props.subtitle}
           </Text>
         </View>
-      </Card>
+      </View>
     );
   }
 }

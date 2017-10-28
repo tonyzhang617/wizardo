@@ -48,14 +48,13 @@ const styles = StyleSheet.create({
 export class PlayerHit extends Component {
   render() {
     return (
-      <Card
-        flexDirection='row'
-        containerStyle={
-          styles.roundedCorners
-        }
-        wrapperStyle={{
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
           justifyContent: 'flex-start',
-          alignItems: 'center'
+          alignItems: 'center',
+          padding: 8,
         }}>
         <View style={
           styles.columnContainer
@@ -114,7 +113,7 @@ export class PlayerHit extends Component {
               onPress={() => this.props.onIncHit(this.props.index)} />
           </View>
         </View>
-      </Card>
+      </View>
     );
   }
 }
