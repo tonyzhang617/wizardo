@@ -31,17 +31,21 @@
 # Screenshots
 <image
   align="left"
-  width="144"
+  width="360"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot1.png" />
 <image
   align="left"
-  width="144"
+  width="360"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot2.png" />
 <image
 	align="left"
-  width="144"
+  width="360"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot3.png" />
 <image
 	align="left"
-  width="144"
+  width="360"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot4.png" />
+<image
+	align="left"
+  width="360"
+	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot5.png" />
