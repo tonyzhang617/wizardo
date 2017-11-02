@@ -37,6 +37,7 @@
   align="left"
   width="360"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot2.png" />
+
 <image
 	align="left"
   width="360"
@@ -45,6 +46,7 @@
 	align="left"
   width="360"
 	src="https://github.com/tonyzhang617/wizardo/blob/master/assets/screenshot4.png" />
+
 <image
 	align="left"
   width="360"
